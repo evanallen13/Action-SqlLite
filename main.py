@@ -1,7 +1,9 @@
 import sqlite3
 import os
 
-db_file = 'example.db'
+db_file = 'data/example.db'
+os.makedirs(os.path.dirname(db_file), exist_ok=True)
+
 conn = sqlite3.connect(db_file)
 cursor = conn.cursor()
 

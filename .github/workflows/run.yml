@@ -5,7 +5,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-slim
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}
       cancel-in-progress: true
@@ -15,10 +15,11 @@ jobs:
       issues: write
 
     steps:
-      - name: Checkout repo
+      - name: Checkout main branch
         uses: actions/checkout@v4
         with:
-          ref: 'data'
+          ref: main
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -32,6 +33,10 @@ jobs:
           pip install -r requirements.txt
           python main.py
 
+      - name: Switch to data branch
+        run: |
+          git checkout data
+
       - name: Commit changes if any
         run: |
           git config user.name "github-actions[bot]"
@@ -39,4 +44,4 @@ jobs:
 
           git add *.db
           git commit -m "Update database files" || echo "No changes to commit"
-          git push
+          git push origin data

@@ -34,15 +34,16 @@ jobs:
           git fetch origin data || true
 
           if git ls-remote --exit-code --heads origin data; then
-            git checkout data
+            git checkout --track origin/data
           else
             git checkout --orphan data
             git rm -rf .
           fi
 
-          cp /tmp/example.db ./data/example.db
+          # Place the db at the root of the data branch (or keep in data/ folder — your choice)
+          cp /tmp/example.db ./example.db
 
-          git add data/example.db
+          git add example.db
           git diff --staged --quiet || git commit -m "Update example.db [$(date -u '+%Y-%m-%d %H:%M:%S UTC')]"
           git push origin data
         env:

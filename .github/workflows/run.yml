@@ -33,9 +33,9 @@ jobs:
           pip install -r requirements.txt
           python main.py
 
-      - name: Switch to data branch
-        run: |
-          git checkout --track origin/data
+      # - name: Switch to data branch
+      #   run: |
+      #     git checkout --track origin/data
 
       - name: Commit changes if any
         run: |

@@ -9,7 +9,7 @@ jobs:
     concurrency:
       group: ${{ github.workflow }}
       cancel-in-progress: true
-      
+
     permissions:
       contents: write
       issues: write
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
+        with:
+          ref: 'data'
 
       - name: Set up Python
         uses: actions/setup-python@v6

@@ -26,7 +26,7 @@ jobs:
 
       - name: Push example.db to data branch
         run: |
-          cp example.db /tmp/example.db
+          cp data/example.db /tmp/example.db
 
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"

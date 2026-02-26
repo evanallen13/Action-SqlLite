@@ -40,9 +40,9 @@ jobs:
             git rm -rf .
           fi
 
-          cp /tmp/example.db ./example.db
+          cp /tmp/example.db ./data/example.db
 
-          git add example.db
+          git add data/example.db
           git diff --staged --quiet || git commit -m "Update example.db [$(date -u '+%Y-%m-%d %H:%M:%S UTC')]"
           git push origin data
         env:

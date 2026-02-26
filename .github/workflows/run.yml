@@ -35,7 +35,7 @@ jobs:
 
       - name: Switch to data branch
         run: |
-          git checkout data
+          git checkout --track origin/data
 
       - name: Commit changes if any
         run: |

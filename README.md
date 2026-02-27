@@ -40,7 +40,6 @@ This project demonstrates how GitHub Actions cache can be used to maintain persi
 - **Persistent Storage**: Data survives between workflow runs
 - **Cost Effective**: Uses GitHub's free cache storage (up to 10GB per repository)
 - **Simple Setup**: No external database or storage service required
-- **Great for Demos**: Perfect for proof-of-concept projects and testing
 
 ## Limitations
 

@@ -33,7 +33,7 @@ jobs:
             key: ${{ github.workflow }}
             path: |
                 ./data/example.db
-            
+                
       - name: Install dependencies
         run: pip install -r requirements.txt 
 

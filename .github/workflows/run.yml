@@ -43,3 +43,6 @@ jobs:
             key: ${{ github.workflow }}
             path: |
                 ./data/example.db
+
+      - name: Timeout
+        run: sleep 10

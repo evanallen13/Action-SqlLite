@@ -1,4 +1,4 @@
-# Action-SqlLite
+# QuasiDB
 
 A demonstration project showing how to use GitHub Actions workflow caching to persist SQLite database data between workflow runs.
 

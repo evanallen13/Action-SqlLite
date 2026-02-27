@@ -27,9 +27,11 @@ jobs:
         id: cache-db
         uses: actions/cache/restore@v5
         with:
-            key: ${{ github.workflow }}
-            path: |
-                ./data/example.db
+          key: ${{ github.workflow }}
+          restore-keys: |
+            ${{ github.workflow }}
+          path: |
+            ./data/example.db
             
       - name: Install dependencies
         run: pip install -r requirements.txt 
@@ -40,7 +42,7 @@ jobs:
       - name: Cache Database
         uses: actions/cache/save@v5
         with:
-            key: ${{ github.workflow }}
+            key: ${{ github.workflow }}-${{ github.run_id }}
             path: |
                 ./data/example.db
 

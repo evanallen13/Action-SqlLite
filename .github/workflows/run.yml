@@ -8,14 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.workflow }}
-      cancel-in-progress: false
+      cancel-in-progress: true
     permissions:
       contents: write
 
     steps:
-      - name: Timeout
-        run: sleep 60
-
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:

@@ -11,6 +11,7 @@ jobs:
       cancel-in-progress: true
     permissions:
       contents: write
+      actions: write
 
     steps:
       - name: Checkout main branch
@@ -37,6 +38,12 @@ jobs:
       - name: Run Python script
         run: python main.py
       
+      - name: Delete old cache
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh cache delete "${{ github.workflow }}" --repo ${{ github.repository }} || true
+
       - name: Cache Database
         uses: actions/cache/save@v5
         with:

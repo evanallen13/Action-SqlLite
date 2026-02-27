@@ -20,35 +20,23 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Restore cached database
+        id: cache-db
+        uses: actions/cache/restore@v5
+        with:
+            key: ${{ github.workflow }}
+            path: |
+                ./data/example.db
+            
       - name: Install dependencies
         run: pip install -r requirements.txt 
 
       - name: Run Python script
         run: python main.py
-
-      - name: Push example.db to data branch
-        run: |
-          cp data/example.db /tmp/example.db
-
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-          # Discard the generated file so git has a clean state
-          git checkout -- data/example.db 2>/dev/null || git rm -f data/example.db
-
-          git fetch origin data || true
-
-          if git ls-remote --exit-code --heads origin data; then
-            git checkout --track origin/data
-          else
-            git checkout --orphan data
-            git rm -rf .
-          fi
-
-          cp /tmp/example.db ./example.db
-
-          git add example.db
-          git diff --staged --quiet || git commit -m "Update example.db [$(date -u '+%Y-%m-%d %H:%M:%S UTC')]"
-          git push origin data
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Cache Database
+        uses: actions/cache/save@v5
+        with:
+            key: ${{ github.workflow }}
+            path: |
+                ./data/example.db

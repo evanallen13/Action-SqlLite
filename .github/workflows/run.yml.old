@@ -1,0 +1,54 @@
+name: Generate and Push Database
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-db:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt 
+
+      - name: Run Python script
+        run: python main.py
+
+      - name: Push example.db to data branch
+        run: |
+          cp data/example.db /tmp/example.db
+
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          # Discard the generated file so git has a clean state
+          git checkout -- data/example.db 2>/dev/null || git rm -f data/example.db
+
+          git fetch origin data || true
+
+          if git ls-remote --exit-code --heads origin data; then
+            git checkout --track origin/data
+          else
+            git checkout --orphan data
+            git rm -rf .
+          fi
+
+          cp /tmp/example.db ./example.db
+
+          git add example.db
+          git diff --staged --quiet || git commit -m "Update example.db [$(date -u '+%Y-%m-%d %H:%M:%S UTC')]"
+          git push origin data
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

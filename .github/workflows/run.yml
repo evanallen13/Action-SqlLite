@@ -13,6 +13,9 @@ jobs:
       contents: write
 
     steps:
+      - name: Timeout
+        run: sleep 10
+
       - name: Checkout main branch
         uses: actions/checkout@v4
         with:
@@ -27,11 +30,9 @@ jobs:
         id: cache-db
         uses: actions/cache/restore@v5
         with:
-          key: ${{ github.workflow }}
-          restore-keys: |
-            ${{ github.workflow }}
-          path: |
-            ./data/example.db
+            key: ${{ github.workflow }}
+            path: |
+                ./data/example.db
             
       - name: Install dependencies
         run: pip install -r requirements.txt 
@@ -42,9 +43,6 @@ jobs:
       - name: Cache Database
         uses: actions/cache/save@v5
         with:
-            key: ${{ github.workflow }}-${{ github.run_id }}
+            key: ${{ github.workflow }}
             path: |
                 ./data/example.db
-
-      - name: Timeout
-        run: sleep 10

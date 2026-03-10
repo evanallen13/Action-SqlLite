@@ -30,22 +30,20 @@ def main():
         + requests.compat.urlencode(query)
     )
 
-    print(f"{lookup_url}")
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/json;api-version=6.0-preview.1",
+    }
 
-    # headers = {
-    #     "Authorization": f"Bearer {token}",
-    #     "Accept": "application/json;api-version=6.0-preview.1",
-    # }
-
-    # try:
-    #     response = requests.get(lookup_url, headers=headers)
-    #     response.raise_for_status()
-    #     payload = response.json()
-    # except requests.exceptions.HTTPError as e:
-    #     if e.response.status_code in (204, 404):
-    #         print("No cache found.")
-    #         return False
-    #     raise
+    try:
+        response = requests.get(lookup_url, headers=headers)
+        response.raise_for_status()
+        payload = response.json()
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code in (204, 404):
+            print("No cache found.")
+            return False
+        raise
 
 if __name__ == "__main__":
     main()

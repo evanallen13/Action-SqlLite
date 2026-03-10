@@ -6,7 +6,7 @@ import requests
 def main(): 
     token = os.getenv("ACTIONS_RUNTIME_TOKEN")
     cache_url = os.getenv("ACTIONS_CACHE_URL")
-    key=os.environ["GITHUB_WORKFLOW"]
+    key = os.getenv("GITHUB_WORKFLOW")
     print(f"ACTIONS_CACHE_URL: {cache_url}")
     print(f"GITHUB_WORKFLOW: {key}")
     if not token or not cache_url or not key:

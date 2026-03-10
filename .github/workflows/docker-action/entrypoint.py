@@ -39,13 +39,14 @@ def main():
         method="GET",
     )
 
-    try:
-        with urllib.request.urlopen(req) as resp:
-            payload = json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        if e.code in (204, 404):
-            return False
-        raise
+    print(req)
+    # try:
+    #     with urllib.request.urlopen(req) as resp:
+    #         payload = json.loads(resp.read().decode("utf-8"))
+    # except urllib.error.HTTPError as e:
+    #     if e.code in (204, 404):
+    #         return False
+    #     raise
 
     # archive_url = payload.get("archiveLocation") or payload.get("archive_location")
     # if not archive_url:

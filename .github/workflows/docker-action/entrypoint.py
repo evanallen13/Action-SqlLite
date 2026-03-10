@@ -39,15 +39,18 @@ def main():
         method="GET",
     )
 
-    print("Response --------------------")
-    try:
-        with urllib.request.urlopen(req) as resp:
-            print(resp.read())
-            payload = json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        if e.code in (204, 404):
-            return False
-        raise
+
+    print("Requesting cache lookup...")
+
+    # print("Response --------------------")
+    # try:
+    #     with urllib.request.urlopen(req) as resp:
+    #         print(resp.read())
+    #         payload = json.loads(resp.read().decode("utf-8"))
+    # except urllib.error.HTTPError as e:
+    #     if e.code in (204, 404):
+    #         return False
+    #     raise
 
     # archive_url = payload.get("archiveLocation") or payload.get("archive_location")
     # if not archive_url:

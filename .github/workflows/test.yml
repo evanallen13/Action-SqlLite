@@ -21,7 +21,9 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-          
+          depth: 1
+      
+      
       - name: Run Docker
         uses: ./.github/workflows/docker-action
         with:

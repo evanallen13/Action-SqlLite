@@ -9,5 +9,5 @@ inputs:
 runs:
   using: docker
   image: Dockerfile
-  entrypoint: /entrypoint.sh
-  post-entrypoint: /post.sh
+  entrypoint: /entrypoint.py
+  post-entrypoint: /post.py

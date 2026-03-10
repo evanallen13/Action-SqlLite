@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:3.12
+FROM python:3.12-slim
 
 COPY entrypoint.py /entrypoint.py
 COPY post.py /post.py

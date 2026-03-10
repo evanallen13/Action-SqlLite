@@ -24,6 +24,11 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Run Docker
+        uses: ./.github/workflows/docker-action
+        with:
+          message: Running main step
+
       - name: Restore cached database
         id: cache-db
         uses: actions/cache/restore@v5

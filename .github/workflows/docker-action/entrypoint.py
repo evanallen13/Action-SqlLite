@@ -9,13 +9,14 @@ from src.gh_helper import GitHub_Helper
 
 def main(): 
     token = os.getenv("ACTIONS_RUNTIME_TOKEN")
+    gh_token = os.getenv("GITHUB_TOKEN")
     org = os.getenv("GITHUB_REPOSITORY_OWNER")
     repo = os.getenv("GITHUB_REPOSITORY").split("/")[1] if os.getenv("GITHUB_REPOSITORY") else None
     key = os.getenv("INPUT_KEY", "DefaultKey")
     path = os.getenv("CACHE_PATH", "./data")
     cache_url = os.getenv("ACTIONS_CACHE_URL")
 
-    gh_helper = GitHub_Helper(token=token, org=org, repo=repo)
+    gh_helper = GitHub_Helper(token=gh_token, org=org, repo=repo)
     cache = gh_helper.get_cache(key=key)
     key = cache.get("key") if cache else None
     version = cache.get("version") if cache else None

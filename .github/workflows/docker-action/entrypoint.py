@@ -2,6 +2,7 @@
 import hashlib
 import os
 import requests
+import urllib.request
 
 def main(): 
     token = os.getenv("ACTIONS_RUNTIME_TOKEN")
@@ -23,27 +24,20 @@ def main():
     if version:
         query["version"] = version
 
-   
     lookup_url = (
         cache_url.rstrip("/")
         + "/_apis/artifactcache/cache?"
-        + requests.compat.urlencode(query)
+        + urllib.parse.urlencode(query)
     )
 
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Accept": "application/json;api-version=6.0-preview.1",
-    }
-
-    try:
-        response = requests.get(lookup_url, headers=headers)
-        response.raise_for_status()
-        payload = response.json()
-    except requests.exceptions.HTTPError as e:
-        if e.response.status_code in (204, 404):
-            print("No cache found.")
-            return False
-        raise
+    req = urllib.request.Request(
+        lookup_url,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/json;api-version=6.0-preview.1",
+        },
+        method="GET",
+    )
 
 if __name__ == "__main__":
     main()

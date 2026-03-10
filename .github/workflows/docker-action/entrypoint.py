@@ -6,7 +6,7 @@ import requests
 def main(): 
     token = os.getenv("ACTIONS_RUNTIME_TOKEN")
     cache_url = os.getenv("ACTIONS_CACHE_URL")
-    key = os.getenv("key")
+    key = os.getenv("INPUT_KEY", "DefaultKey")
     path = os.getenv("CACHE_PATH", "./data")
     print(f"ACTIONS_CACHE_URL: {cache_url}")
     print(f"Key: {key}")

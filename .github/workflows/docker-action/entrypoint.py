@@ -51,10 +51,12 @@ def main():
             payload = json.loads(body.decode("utf-8"))
     except urllib.error.HTTPError as e:
         if e.code in (204, 400, 404):
+            print(f"Cache not found (HTTP {e.code})")
             return False
         raise
 
     archive_url = payload.get("archiveLocation") or payload.get("archive_location")
+    print(f"Archive URL: {archive_url}")
     if not archive_url:
         return False
 

@@ -1,12 +1,6 @@
 #!/usr/bin/env python3
 import os
-# import json
-# import shutil
-# import subprocess
-# import tempfile
-# import urllib.parse
-# import urllib.request
-
+import requests
 
 def main(): 
     token = os.getenv("ACTIONS_RUNTIME_TOKEN")
@@ -14,12 +8,40 @@ def main():
     key=os.environ["GITHUB_WORKFLOW"]
     print(f"ACTIONS_CACHE_URL: {cache_url}")
     print(f"GITHUB_WORKFLOW: {key}")
-
     if not token or not cache_url or not key:
         raise RuntimeError(
             "Missing ACTIONS_RUNTIME_TOKEN or ACTIONS_CACHE_URL or GITHUB_WORKFLOW. "
             "This function must run inside a GitHub Actions job."
         )
+    
+    restore_keys = [] 
+    version = None  
+    keys = ",".join([key] + restore_keys)
+    query = {"keys": keys}
+    if version:
+        query["version"] = version
+
+   
+    lookup_url = (
+        cache_url.rstrip("/")
+        + "/_apis/artifactcache/cache?"
+        + requests.compat.urlencode(query)
+    )
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/json;api-version=6.0-preview.1",
+    }
+
+    try:
+        response = requests.get(lookup_url, headers=headers)
+        response.raise_for_status()
+        payload = response.json()
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code in (204, 404):
+            print("No cache found.")
+            return False
+        raise
 
 if __name__ == "__main__":
     main()

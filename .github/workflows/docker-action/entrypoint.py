@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import hashlib
 import os
 import requests
 
@@ -14,8 +15,8 @@ def main():
             "This function must run inside a GitHub Actions job."
         )
     
-    restore_keys = [] 
-    version = None  
+    restore_keys = []
+    version = hashlib.sha256(key.encode()).hexdigest()
     keys = ",".join([key] + restore_keys)
     query = {"keys": keys}
     if version:

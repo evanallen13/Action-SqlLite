@@ -5,14 +5,21 @@ import urllib.request
 import urllib.parse
 import urllib.error
 import json
+from src.gh_helper import GitHub_Helper
 
 def main(): 
     token = os.getenv("ACTIONS_RUNTIME_TOKEN")
-    cache_url = os.getenv("ACTIONS_CACHE_URL")
+    org = os.getenv("GITHUB_REPOSITORY_OWNER")
+    repo = os.getenv("GITHUB_REPOSITORY").split("/")[1] if os.getenv("GITHUB_REPOSITORY") else None
     key = os.getenv("INPUT_KEY", "DefaultKey")
     path = os.getenv("CACHE_PATH", "./data")
-    print(f"ACTIONS_CACHE_URL: {cache_url}")
-    print(f"Key: {key}")
+    cache_url = os.getenv("ACTIONS_CACHE_URL")
+
+    gh_helper = GitHub_Helper(token=token, org=org, repo=repo)
+    cache = gh_helper.get_cache(key=key)
+    key = cache.get("key") if cache else None
+    version = cache.get("version") if cache else None
+
     if not token or not cache_url or not key:
         raise RuntimeError(
             "Missing ACTIONS_RUNTIME_TOKEN or ACTIONS_CACHE_URL or key. "
@@ -20,17 +27,23 @@ def main():
         )
     
     restore_keys = []
-    version = hashlib.sha256(path.encode()).hexdigest()
+    # version = hashlib.sha256(path.encode()).hexdigest()
+    # print(f"Cache version: {version}")
     keys = ",".join([key] + restore_keys)
     query = {"keys": keys}
     if version:
         query["version"] = version
+
+    print(f"Query: {query}")
+    print(f"Cache URL: {cache_url}")
 
     lookup_url = (
         cache_url.rstrip("/")
         + "/_apis/artifactcache/cache?"
         + urllib.parse.urlencode(query)
     )
+
+    print(f"Lookup URL: {lookup_url}")
 
     req = urllib.request.Request(
         lookup_url,
@@ -40,10 +53,8 @@ def main():
         },
         method="GET",
     )
+    print(f"Request: {req.full_url} with headers {req.headers}")
 
-    print("Requesting cache lookup...")
-
-    print("Response --------------------")
     try:
         with urllib.request.urlopen(req) as resp:
             body = resp.read()

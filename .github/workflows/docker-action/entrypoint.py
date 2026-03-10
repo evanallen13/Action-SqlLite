@@ -39,7 +39,7 @@ def main():
         method="GET",
     )
 
-    print(req)
+    print(req.read())
     # try:
     #     with urllib.request.urlopen(req) as resp:
     #         payload = json.loads(resp.read().decode("utf-8"))
